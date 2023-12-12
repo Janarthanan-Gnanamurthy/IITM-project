@@ -1,0 +1,86 @@
+{% extends 'admin_base.html' %} {% block title %}Admin{% endblock %} {% block
+content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-4">
+      <h1>Database</h1>
+      <div class="card my-4">
+        <div class="card-body">
+          <h3 class="card-title t4">Total Users</h3>
+          <h3 class="card-text my-2 t5 text-center">{{ num_users }}</h3>
+          <button
+            class="btn btn-primary btn-block mt-3"
+            onclick="window.location.href='/admin/users'"
+          >
+            Manage Users
+          </button>
+        </div>
+      </div>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h3 class="card-title t4">Total Creators</h3>
+          <h3 class="card-text t5 text-center">{{ num_creators }}</h3>
+          <button
+            class="btn btn-primary btn-block mt-3"
+            onclick="window.location.href='/admin/users'"
+          >
+            Manage Creators
+          </button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title t4">Total Songs</h3>
+          <h3 class="card-text text-center t5">{{ num_songs }}</h3>
+          <button
+            class="btn btn-primary btn-block mt-3"
+            onclick="window.location.href='/admin/songs'"
+          >
+            Manage Songs
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <h1>App performance</h1>
+      <div class="row my-4">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center t4">Views</h4>
+              <h4 class="t5 text-center">{{ num_views }}</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center t4">Ratings</h4>
+              <h4 class="t5 text-center">{{ avg }}</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-center t4">Genre</h4>
+              <h4 class="t5 text-center">{{ num_genre }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title t4">Analytics</h4>
+            <img
+              src="data:image/png;base64,{{ img_base64 }}"
+              alt="Song Views Chart"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

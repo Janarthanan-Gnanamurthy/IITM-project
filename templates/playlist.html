@@ -1,0 +1,208 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h1 class="t4">{{ playlist.title }}</h1>
+  <div class="row mt-5">
+    <div class="col-md-4 mb-4">
+      <img
+        src="{{ url_for('static', filename='uploads/images/playlist_cover.jpeg') }}"
+        alt="Playlist Image"
+        class="img-fluid rounded"
+      />
+    </div>
+    <div class="col-md-8">
+      <div id="song-info" class="mb-3">
+        <h3 id="song-title"></h3>
+        <p id="song-artist"></p>
+      </div>
+
+      <audio id="audio-player" controls class="mb-3" style="display: none">
+        Your browser does not support the audio element.
+      </audio>
+
+      <button
+        id="play-button"
+        class="btn btn-primary btn-lg"
+        onclick="playFirstSong()"
+      >
+        Play
+      </button>
+      <button
+        id="shuffle-button"
+        class="btn btn-success bi-shuffle btn-lg ml-2"
+        onclick="shufflePlaylist()"
+      >
+        Shuffle
+      </button>
+    </div>
+  </div>
+
+  <div id="playlist" class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Artist</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for song in playlist.songs %}
+        <tr
+          class="song"
+          data-song-id="{{ song.id }}"
+          data-mp3="{{ url_for('static', filename='uploads/' + song.mp3) }}"
+          data-image="{{ url_for('static', filename='uploads/' + song.image) }}"
+          data-title="{{ song.title }}"
+          data-artist="{{ song.artist }}"
+        >
+          <td>{{ song.title }}</td>
+          <td>{{ song.artist }}</td>
+          <td>
+            <button
+              class="btn btn-danger"
+              onclick="window.location.href='/playlist/{{playlist.id}}/{{song.id}}'"
+            >
+              Remove
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  var playlist = document.getElementById("playlist");
+  var audioPlayer = document.getElementById("audio-player");
+  var playlistImage = document.querySelector(".col-md-4 img");
+  var playButton = document.getElementById("play-button");
+  var songInfo = document.getElementById("song-info");
+  var songTitle = document.getElementById("song-title");
+  var songArtist = document.getElementById("song-artist");
+  var currentSong = null;
+
+  function playFirstSong() {
+    var firstSong = playlist.querySelector(".song");
+    if (firstSong) {
+      var mp3Url = firstSong.getAttribute("data-mp3");
+      var imageUrl = firstSong.getAttribute("data-image");
+      var title = firstSong.getAttribute("data-title");
+      var artist = firstSong.getAttribute("data-artist");
+
+      audioPlayer.src = mp3Url;
+      audioPlayer.load();
+      audioPlayer.play();
+
+      playlistImage.src = imageUrl;
+      updateSongInfo(title, artist);
+      setCurrentSong(firstSong);
+
+      var nextbtn = document.getElementById("next-button");
+      if (!nextbtn) {
+        addNextButton();
+      }
+    }
+  }
+
+  playlist.addEventListener("click", function (event) {
+    var target = event.target.closest(".song");
+    if (target) {
+      var mp3Url = target.getAttribute("data-mp3");
+      var imageUrl = target.getAttribute("data-image");
+      var title = target.getAttribute("data-title");
+      var artist = target.getAttribute("data-artist");
+
+      audioPlayer.src = mp3Url;
+      audioPlayer.load();
+      audioPlayer.play();
+
+      playlistImage.src = imageUrl;
+      updateSongInfo(title, artist);
+      setCurrentSong(target);
+    }
+  });
+
+  audioPlayer.addEventListener("ended", playNextSong);
+
+  function playNextSong() {
+    var nextSong = currentSong.nextElementSibling;
+    if (nextSong) {
+      var mp3Url = nextSong.getAttribute("data-mp3");
+      var imageUrl = nextSong.getAttribute("data-image");
+      var title = nextSong.getAttribute("data-title");
+      var artist = nextSong.getAttribute("data-artist");
+
+      audioPlayer.src = mp3Url;
+      audioPlayer.load();
+      audioPlayer.play();
+
+      playlistImage.src = imageUrl;
+      updateSongInfo(title, artist);
+      setCurrentSong(nextSong);
+    }
+  }
+
+  function updateSongInfo(title, artist) {
+    songTitle.textContent = title;
+    songArtist.textContent = artist;
+    songInfo.style.display = "block";
+    playButton.style.display = "none";
+    audioPlayer.style.display = "block";
+  }
+
+  function setCurrentSong(songElement) {
+    if (currentSong) {
+      currentSong.classList.remove("active");
+    }
+    currentSong = songElement;
+    currentSong.classList.add("active");
+  }
+
+  function shufflePlaylist() {
+    var table = document.getElementById("playlist");
+    var tbody = table.querySelector("tbody");
+    var rows = Array.from(tbody.getElementsByTagName("tr"));
+    shuffleArray(rows);
+
+    // Remove all rows from the tbody
+    rows.forEach(function (row) {
+      tbody.removeChild(row);
+    });
+
+    // Append the shuffled rows to the tbody
+    rows.forEach(function (row) {
+      tbody.appendChild(row);
+    });
+
+    // If a song is playing, restart the playlist after shuffling
+    if (!audioPlayer.paused) {
+      playFirstSong();
+    }
+  }
+
+  function shuffleArray(array) {
+    // Fisher-Yates shuffle algorithm
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  }
+
+  function addNextButton() {
+    var nextButton = document.createElement("button");
+    nextButton.id = "next-button"; // Added id attribute
+    nextButton.classList.add("btn", "btn-primary", "btn-lg", "ml-2");
+    nextButton.textContent = "Next";
+    nextButton.onclick = playNextSong; // Call playNextSong function when clicked
+
+    var shuffleButton = document.getElementById("shuffle-button");
+    shuffleButton.parentNode.insertBefore(
+      nextButton,
+      shuffleButton.nextSibling
+    );
+  }
+</script>
+{% endblock %}

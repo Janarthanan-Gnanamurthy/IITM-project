@@ -1,0 +1,127 @@
+{% extends 'base.html' %} {% block title %}Play{% endblock %} {% block content
+%}
+<div class="container mt-4 rounded">
+  <div class="card">
+    <div class="card-body bgc-2">
+      <img
+        src="{{ url_for('static', filename='uploads/' + song.image)}}"
+        alt="Uploaded image"
+        width="150"
+        class="rounded mx-auto d-block mb-3"
+      />
+      <h2 class="card-title text-center mb-2">{{ song.title }}</h2>
+      <h4 class="card-subtitle text-muted text-center mb-3">
+        {{ song.artist }}
+      </h4>
+
+      <audio controls autoplay class="w-100 mb-3">
+        <source
+          src="{{ url_for('static', filename='uploads/' + song.mp3) }}"
+          type="audio/mp3"
+        />
+        Your browser does not support the audio element.
+      </audio>
+
+      <button
+        type="button"
+        class="btn btn-success btn-block mb-3"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        Rate
+      </button>
+
+      <div class="d-flex justify-content-center custom-scrollbar bg-white rounded" style="height: 500px;">
+        <div id="lyrics">
+          <pre class=" text-black" style="font-size: large;">
+          {{ song.lyrics }}
+          </pre>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bgc-2 t4">
+          <h3 class="modal-title" id="exampleModalLabel">Rating</h3>
+          <button
+            class= "btn btn-close bi-x-lg t4"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body bgc-4">
+          <form action="/rate-song/{{song.id}}" method="post">
+            <h5 class="text-center">Select your rating:</h5 t4>
+            <div class="d-flex justify-content-center my-2">
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="rating"
+                  value="1"
+                />
+                <h5 class="form-check-label t5">1</h5>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="rating"
+                  value="2"
+                />
+                <h5 class="form-check-label t5">2</h5>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="rating"
+                  value="3"
+                />
+                <h5 class="form-check-label t5">3</h5>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="rating"
+                  value="4"
+                />
+                <h5 class="form-check-label t5">4</h5>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="rating"
+                  value="5"
+                />
+                <h5 class="form-check-label t5">5</h5>
+              </div>
+            </div>
+            <button
+              hx-post="/rate-song/{{song.id}}"
+              hx-trigger="click"
+              hx-target="#main"
+              hx-swap="outerHTML"
+              class="btn btn-success mt-3 w-100"
+            >
+              Submit Rating
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

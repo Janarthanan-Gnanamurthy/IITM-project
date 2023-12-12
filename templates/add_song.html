@@ -1,0 +1,132 @@
+{% extends 'base.html' %} {% block title %}Create User{% endblock %} {% block
+content %}
+<div class="container d-flex flex-column align-items-center mt-5">
+  <div
+    class="d-flex flex-column align-items-center bgc-2"
+    style="width: 700px; padding: 30px"
+  >
+    <h1 class="mb-4">Add a New Song</h1>
+    <form
+      action="/songs/add"
+      method="post"
+      id="create-form"
+      enctype="multipart/form-data"
+      class="w-100"
+    >
+      <div class="form-group">
+        <input
+          type="text"
+          name="title"
+          class="form-control nm w-100"
+          placeholder="Title"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          name="artist"
+          class="form-control nm w-100"
+          placeholder="Artist"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          name="genre"
+          class="form-control nm w-100"
+          placeholder="Genre"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          name="lyrics"
+          class="form-control nm w-100"
+          placeholder="Lyrics"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="album" class="text-white">Select Album:</label>
+        <select name="album" class="form-control nm" required>
+          <option value="" disabled selected>Select Album</option>
+          {% for album in existing_albums %}
+          <option value="{{ album.id }}">{{ album.title }}</option>
+          {% endfor %}
+        </select>
+        <button
+          type="button"
+          class="btn btn-primary text-center my-2"
+          data-bs-toggle="modal"
+          data-bs-target="#modal1"
+        >
+          Create Album
+        </button>
+      </div>
+      <div class="form-group">
+        <label for="image" class="text-white">Image:</label>
+        <input
+          type="file"
+          name="image"
+          class="form-control nm w-100"
+          accept="image/*"
+          required
+          style="height: auto"
+        />
+      </div>
+      <div class="form-group">
+        <label for="mp3" class="text-white">MP3:</label>
+        <input
+          type="file"
+          name="mp3"
+          class="form-control nm w-100"
+          accept="audio/mp3"
+          required
+          style="height: auto"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Submit</button>
+    </form>
+  </div>
+  <div
+    class="modal fade"
+    id="modal1"
+    tabindex="-1"
+    aria-labelledby="modal1Label"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background-color: #491f62">
+          <h3 class="modal-title fs-5" id="modal1Label">Create Album</h3>
+          <button
+            type="button"
+            class="btn btn-primary bi-x-lg"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form action="/album" method="post">
+            <div class="mb-3">
+              <label for="albumTitle" class="form-label">Album Title</label>
+              <input
+                type="text"
+                class="form-control"
+                id="albumTitle"
+                name="title"
+                placeholder="Enter the title"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Create Album</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

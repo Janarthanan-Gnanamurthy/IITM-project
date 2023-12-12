@@ -1,0 +1,135 @@
+{% extends 'base.html' %} {% block title %}Creator Dashboard{% endblock %} {%
+block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Creator Dashboard</h2>
+
+  <div class="row mb-3">
+    <div class="col-md-6 mb-3">
+      <div class="text-center">
+        <a
+          href="/songs/add"
+          class="btn btn-primary btn-block btn-lg"
+          style="border: 0px"
+        >
+          <i class="bi bi-music-note"></i> Add Song
+        </a>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <div class="text-center">
+        <button
+          class="btn btn-primary btn-block btn-lg"
+          data-bs-toggle="modal"
+          data-bs-target="#modal1"
+          style="border: 0px"
+        >
+          <i class="bi bi-record"></i> Add Album
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Uploaded Songs, Total Albums, Average Rating Cards -->
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Total Uploaded Songs</h5>
+          <p class="card-text h4">{{ total_uploads }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Total Albums</h5>
+          <p class="card-text h4">{{ total_albums }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Average Rating</h5>
+          <p class="card-text h4">{{ avg }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Uploads Card -->
+  <div class="card mt-3">
+    <div class="card-body" style="padding: 0px; padding-top: 20px">
+      <h5 class="card-title pl-4">Recent Uploads</h5>
+      <table class="table table-hover">
+        <tbody>
+          {% for song in recent_uploads %}
+          <tr>
+            <td>{{ song.title }}</td>
+            <td>{{ song.artist }}</td>
+            <td>{{ song.album.title if song.album else '' }}</td>
+            <td>
+              <button
+                class="btn btn-outline-primary btn-sm"
+                onclick="window.location.href='/edit/song/{{song.id}}'"
+              >
+                Edit
+              </button>
+            </td>
+            <td>
+              <button
+                class="btn btn-danger btn-sm"
+                onclick="window.location.href='/del/song/{{song.id}}'"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="modal1"
+    tabindex="-1"
+    aria-labelledby="modal1Label"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background-color: #491f62">
+          <h3 class="modal-title fs-5" id="modal1Label">Create Album</h3>
+          <button
+            type="button"
+            class="btn btn-primary bi-x-lg"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form action="/album" method="post">
+            <div class="mb-3">
+              <label for="albumTitle" class="form-label">Album Title</label>
+              <input
+                type="text"
+                class="form-control"
+                id="albumTitle"
+                name="title"
+                placeholder="Enter the title"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Create Album</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

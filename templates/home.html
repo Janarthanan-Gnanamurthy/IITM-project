@@ -1,0 +1,159 @@
+{% extends 'base.html' %} {% block title %}Home{% endblock %} {% block content
+%}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 mb-4">
+      <h2 class="mb-3 mx t2">Recommended</h2>
+      <div class="d-flex flex-wrap overflow-auto">
+        {% for song in songs[:6] %}
+        <div
+          class="card mx-2 bgc-2 my-2"
+          style="
+            min-width: 200px;
+            border: 1px solid #491f62;
+            border-radius: 10px;
+          "
+          onclick="redirect({{song.id}})"
+        >
+          <img
+            src="{{ url_for('static', filename='uploads/' + song.image) }}"
+            class="card-img-top"
+            alt="Song Image"
+          />
+          <div
+            class="card-body d-flex flex-column align-items-center justify-content-center"
+          >
+            <h4 class="card-title" style="color: #fcfbfe; font-weight: bold">
+              {{ song.title }}
+            </h4>
+            <p class="card-text" style="color: #9a999d">{{ song.artist }}</p>
+            <a href="{{url_for('play', id=song.id)}}" class="btn btn-primary"
+              >Listen</a
+            >
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-md-4 align-items-center">
+      <h2 class="mb-3 mx t2">Your Playlist</h2>
+      <div
+        class="d-flex flex-column custom-scrollbar"
+        style="
+          height: 800px;
+          width: 280px;
+          border: 1px solid #491f62;
+          border-radius: 10px;
+          padding: 10px;
+        "
+      >
+        {% for playlist in playlists %}
+        <div
+          class="card mb-3 bgc-2"
+          style="width: 245px; border: 1px solid #491f62; border-radius: 10px"
+        >
+          <img
+            src="{{ url_for('static', filename='uploads/images/playlist_cover.jpeg') }}"
+            class="card-img-top"
+            alt="Playlist Cover Image"
+          />
+          <div
+            class="card-body d-flex flex-column align-items-center justify-content-center"
+          >
+            <h4 class="card-title" style="color: #fcfbfe; font-weight: bold">
+              {{ playlist.title }}
+            </h4>
+            <p class="card-text" style="color: #9a999d">
+              Created by: {{ playlist.user.username }}
+            </p>
+            <a
+              href="{{ url_for('play_playlist', id=playlist.id) }}"
+              class="btn btn-primary"
+              >Listen</a
+            >
+          </div>
+        </div>
+        {% endfor %}
+        <div
+          class="card mx-2 bgc-2"
+          style="
+            min-width: 200px;
+            min-height: 200px;
+            border: 1px solid #491f62;
+            border-radius: 10px;
+          "
+          onclick="window.location.href='/create/playlist'"
+        >
+          <div
+            class="card-body d-flex flex-column align-items-center justify-content-center"
+          >
+            <h4
+              class="card-title font-weight-bold"
+              style="color: #fcfbfe; font-weight: bold"
+            >
+              Create Playlist
+            </h4>
+            <a
+              href="/create/playlist"
+              class="btn btn-primary btn-lg rounded-circle mt-3"
+              style="
+                background-color: #e3e2e5;
+                color: #491f62;
+                border-radius: 50%;
+              "
+              >+</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    {% for genre in unique_genres %}
+    <div class="col-md-12 my-3">
+      <h2
+        style="
+          color: #e3e2e5;
+          font-weight: bold;
+          text-transform: capitalize;
+          margin: 20px;
+        "
+      >
+        {{genre}}
+      </h2>
+      <div class="d-flex flex-row overflow-auto">
+        {% for song in songs %} {% if song.genre == genre %}
+        <div
+          class="card mx-2 bgc-2"
+          style="
+            min-width: 200px;
+            border: 1px solid #491f62;
+            border-radius: 10px;
+          "
+        >
+          <img
+            src="{{ url_for('static', filename='uploads/' + song.image) }}"
+            class="card-img-top"
+            alt="Song Image"
+          />
+          <div
+            class="card-body d-flex flex-column align-items-center justify-content-center"
+          >
+            <h4 class="card-title" style="color: #fcfbfe; font-weight: bold">
+              {{ song.title }}
+            </h4>
+            <p class="card-text" style="color: #9a999d">{{ song.artist }}</p>
+            <a href="{{ url_for('play', id=song.id) }}" class="btn btn-primary"
+              >Listen</a
+            >
+          </div>
+        </div>
+        {% endif %} {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

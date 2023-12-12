@@ -1,0 +1,196 @@
+{% extends 'base.html' %} {% block title %}Play{% endblock %} {% block content
+%}
+<div class="container mt-4 rounded h">
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex flex-row justify-content-center">
+        <img
+          src="{{ url_for('static', filename='uploads/' + song.image)}}"
+          alt="Uploaded image"
+          width="150"
+          class="rounded d-block mb-3 ml-4"
+        />
+        <i class="bi bi-pencil-square h5 m-2" data-bs-toggle="modal" data-bs-target="#modal5"></i>
+      </div>
+      <h2 class="card-title text-center mb-2">
+        {{ song.title }} <i class="bi bi-pencil-square h5" data-bs-toggle="modal" data-bs-target="#modal1"></i>
+      </h2>
+      <h4 class="card-subtitle text-muted text-center mb-3">
+				Album:
+        {{ album.title }} <i class="bi bi-pencil-square h5" data-bs-toggle="modal" data-bs-target="#modal2"></i>
+      </h4>
+			<div class="d-flex flex-row align-items-stretch my-3">
+				<audio controls autoplay class="w-75">
+					<source
+						src="{{ url_for('static', filename='uploads/' + song.mp3) }}"
+						type="audio/mp3"
+					/>
+					Your browser does not support the audio element.
+				</audio>
+				<Button type="button" class="btn btn-primary text-center ml-3 w-25" data-bs-toggle="modal" data-bs-target="#modal4" > Change Music File</Button>
+			</div>
+			<div id="lyrics">
+				<form class="d-flex flex-column">
+					<textarea name="lyrics" class="d-flex text-center custom-scrollbar bg-white rounded" style="height: 500px; font-size: large;" rows="6">{{ song.lyrics }}</textarea>
+					<button hx-post="/edit/song/{{song.id}}"
+					hx-trigger="click"
+					hx-target="#main"
+					hx-swap="outerHTML" class="btn btn-primary mt-4">
+						Save changes
+					</button>
+				</form>
+			</div>
+  </div>
+</div>
+<div
+		class="modal fade rounded"
+		id="modal1"
+		tabindex="-1"
+		aria-labelledby="modal1Label"
+		aria-hidden="true"
+	>
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header bgc-2 t4">
+					<h3 class="modal-title fs-5" id="modal1Label">Edit title</h3>
+					<button
+							type="button"
+							class="btn btn-danger"
+							data-bs-dismiss="modal"
+						>
+							X
+					</button>
+					</div>
+					<div class="modal-body bgc-4 ">
+						<form action="/edit/song" method="post" class="d-flex flex-column w-max ">
+							<input type="text" class="form-control nm w-100" name="title" placeholder="Enter the title">
+							<button hx-post="/edit/song/{{song.id}}"
+							hx-trigger="click"
+							hx-target="#main"
+							hx-swap="outerHTML" class="btn my-3 btn-primary">
+								Save changes
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+<div
+		class="modal fade"
+		id="modal2"
+		tabindex="-1"
+		aria-labelledby="modal1Label"
+		aria-hidden="true"
+	>
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header bgc-2 t4">
+				<h3 class="modal-title fs-5" id="modal1Label">Edit Album</h3>
+				<button
+						type="button"
+						class="btn btn-danger"
+						data-bs-dismiss="modal"
+					>
+						X
+				</button>
+				</div>
+				<div class="modal-body bgc-4">
+					<form class="d-flex flex-column w-max">
+						<label for="album" class="t5">Select Album:</label>
+						<select name="album" class="form-control" required>
+							<option value="" disabled selected>Select Album</option>
+							{% for album in albums %}
+							<option value="{{ album.id }}">{{ album.title }}</option>
+							{% endfor %}
+						</select>
+						<button hx-post="/edit/song/{{song.id}}"
+						hx-trigger="click"
+						hx-target="#main"
+						hx-swap="outerHTML" class="btn btn-primary mt-4">
+							Save changes
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div
+		class="modal fade"
+		id="modal4"
+		tabindex="-1"
+		aria-labelledby="modal1Label"
+		aria-hidden="true"
+	>
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header bgc-2 t4">
+				<h3 class="modal-title fs-5" id="modal1Label">Update Music file</h3>
+				<button
+						type="button"
+						class="btn btn-danger"
+						data-bs-dismiss="modal"
+					>
+						X
+				</button>
+				</div>
+				<div class="modal-body bgc-4">
+					<form action="/edit/song/{{song.id}}" method="post" class="d-flex flex-column mt-2" enctype="multipart/form-data">
+						<input
+						type="file"
+						name="mp3"
+						class="form-control nm w-100" 
+						style="height: auto;"
+						accept="audio/mp3"
+						required
+						/>
+						<button type="submit" class="btn btn-primary mt-4">
+							Save changes
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div
+		class="modal fade"
+		id="modal5"
+		tabindex="-1"
+		aria-labelledby="modal1Label"
+		aria-hidden="true"
+	>
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header bgc-2 t4">
+				<h3 class="modal-title fs-5" id="modal1Label">Update Image</h3>
+				<button
+						type="button"
+						class="btn btn-danger"
+						data-bs-dismiss="modal"
+					>
+						X
+				</button>
+				</div>
+				<div class="modal-body bgc-4">
+					<form action="/edit/song/{{song.id}}" method="post" class="d-flex flex-column mt-2" enctype="multipart/form-data">
+						<input
+						type="file"
+						name="image"
+						class="form-control nm w-100"
+						style="height: auto;"
+						accept="image/*"
+						required
+						/>
+						<button type="submit" class="btn btn-primary mt-4">
+							Save changes
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block title %}Create Playlist{% endblock %} {%
+block content %}
+<div class="container">
+  <form action="/create/playlist" method="post" class="d-flex flex-column mt-5">
+    <input
+      type="text"
+      name="title"
+      placeholder="Title"
+      style="
+        background-color: #491f62;
+        color: #fcfbfe;
+        padding: 10px;
+        margin-bottom: 10px;
+      "
+      required
+    />
+    <label style="color: #fcfbfe">Select Songs:</label>
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="color: #e3e2e5">Selected</th>
+          <th style="color: #e3e2e5">Songs</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for song in songs %}
+        <tr>
+          <td>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="songs"
+                value="{{ song.id }}"
+              />
+            </div>
+          </td>
+          <td style="color: #fcfbfe">{{ song.title }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      style="background-color: #5b2b78"
+    >
+      Submit
+    </button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'admin_base.html' %} {% block title %}Songs by Genre{% endblock %} {%
+block content %}
+
+<div class="container mt-4">
+  {% for genre in genres %}
+  <h2 class="t4 text-capitalize">{{ genre }}</h2>
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Genre</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for song in songs %} {% if song.genre == genre %}
+      <tr>
+        <td>{{ song.title }}</td>
+        <td>{{ song.artist }}</td>
+        <td>{{song.genre}}</td>
+        <td>
+          <a href="/del/song/{{ song.id }}">Delete</a>
+        </td>
+      </tr>
+      {% endif %} {% endfor %}
+    </tbody>
+  </table>
+  {% endfor %}
+</div>
+
+{% endblock %}
