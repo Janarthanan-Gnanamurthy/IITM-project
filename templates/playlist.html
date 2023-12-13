@@ -10,29 +10,37 @@
       />
     </div>
     <div class="col-md-8">
-      <div id="song-info" class="mb-3">
-        <h3 id="song-title"></h3>
-        <p id="song-artist"></p>
+      <div class="d-flex flex-column">
+        <div id="song-info" class="mb-3">
+          <h3 id="song-title"></h3>
+          <p class="t5" id="song-artist"></p>
+        </div>
+        <audio id="audio-player" controls class="mb-3">
+          Your browser does not support the audio element.
+        </audio>
+        <div class="d-flex">
+          <button
+            id="shuffle-button"
+            class="btn btn-success bi-shuffle btn-lg ml-2"
+            onclick="shufflePlaylist()"
+          >
+            Shuffle
+          </button>
+          <button
+            id="next-button"
+            class="btn btn-primary btn-lg ml-2"
+            onclick="playNextSong()"
+          >
+            Next
+          </button>
+          <button
+            class="btn btn-danger btn-lg ml-2"
+            onclick="deletePlaylist({{ playlist.id }})"
+          >
+            Delete Playlist
+          </button>
+        </div>
       </div>
-
-      <audio id="audio-player" controls class="mb-3" style="display: none">
-        Your browser does not support the audio element.
-      </audio>
-
-      <button
-        id="play-button"
-        class="btn btn-primary btn-lg"
-        onclick="playFirstSong()"
-      >
-        Play
-      </button>
-      <button
-        id="shuffle-button"
-        class="btn btn-success bi-shuffle btn-lg ml-2"
-        onclick="shufflePlaylist()"
-      >
-        Shuffle
-      </button>
     </div>
   </div>
 
@@ -49,11 +57,11 @@
         {% for song in playlist.songs %}
         <tr
           class="song"
-          data-song-id="{{ song.id }}"
           data-mp3="{{ url_for('static', filename='uploads/' + song.mp3) }}"
           data-image="{{ url_for('static', filename='uploads/' + song.image) }}"
           data-title="{{ song.title }}"
           data-artist="{{ song.artist }}"
+          onclick="playSong(this)"
         >
           <td>{{ song.title }}</td>
           <td>{{ song.artist }}</td>
@@ -76,8 +84,6 @@
   var playlist = document.getElementById("playlist");
   var audioPlayer = document.getElementById("audio-player");
   var playlistImage = document.querySelector(".col-md-4 img");
-  var playButton = document.getElementById("play-button");
-  var songInfo = document.getElementById("song-info");
   var songTitle = document.getElementById("song-title");
   var songArtist = document.getElementById("song-artist");
   var currentSong = null;
@@ -85,70 +91,29 @@
   function playFirstSong() {
     var firstSong = playlist.querySelector(".song");
     if (firstSong) {
-      var mp3Url = firstSong.getAttribute("data-mp3");
-      var imageUrl = firstSong.getAttribute("data-image");
-      var title = firstSong.getAttribute("data-title");
-      var artist = firstSong.getAttribute("data-artist");
-
-      audioPlayer.src = mp3Url;
-      audioPlayer.load();
-      audioPlayer.play();
-
-      playlistImage.src = imageUrl;
-      updateSongInfo(title, artist);
-      setCurrentSong(firstSong);
-
-      var nextbtn = document.getElementById("next-button");
-      if (!nextbtn) {
-        addNextButton();
-      }
+      playSong(firstSong);
     }
   }
 
-  playlist.addEventListener("click", function (event) {
-    var target = event.target.closest(".song");
-    if (target) {
-      var mp3Url = target.getAttribute("data-mp3");
-      var imageUrl = target.getAttribute("data-image");
-      var title = target.getAttribute("data-title");
-      var artist = target.getAttribute("data-artist");
+  function playSong(songElement) {
+    var mp3Url = songElement.getAttribute("data-mp3");
+    var imageUrl = songElement.getAttribute("data-image");
+    var title = songElement.getAttribute("data-title");
+    var artist = songElement.getAttribute("data-artist");
 
-      audioPlayer.src = mp3Url;
-      audioPlayer.load();
-      audioPlayer.play();
+    audioPlayer.src = mp3Url;
+    audioPlayer.load();
+    audioPlayer.play();
 
-      playlistImage.src = imageUrl;
-      updateSongInfo(title, artist);
-      setCurrentSong(target);
-    }
-  });
-
-  audioPlayer.addEventListener("ended", playNextSong);
-
-  function playNextSong() {
-    var nextSong = currentSong.nextElementSibling;
-    if (nextSong) {
-      var mp3Url = nextSong.getAttribute("data-mp3");
-      var imageUrl = nextSong.getAttribute("data-image");
-      var title = nextSong.getAttribute("data-title");
-      var artist = nextSong.getAttribute("data-artist");
-
-      audioPlayer.src = mp3Url;
-      audioPlayer.load();
-      audioPlayer.play();
-
-      playlistImage.src = imageUrl;
-      updateSongInfo(title, artist);
-      setCurrentSong(nextSong);
-    }
+    playlistImage.src = imageUrl;
+    updateSongInfo(title, artist);
+    setCurrentSong(songElement);
+    addNextButton();
   }
 
   function updateSongInfo(title, artist) {
     songTitle.textContent = title;
     songArtist.textContent = artist;
-    songInfo.style.display = "block";
-    playButton.style.display = "none";
-    audioPlayer.style.display = "block";
   }
 
   function setCurrentSong(songElement) {
@@ -159,26 +124,23 @@
     currentSong.classList.add("active");
   }
 
+  function playNextSong() {
+    var nextSong = currentSong.nextElementSibling;
+    if (nextSong) {
+      playSong(nextSong);
+    }
+  }
+
   function shufflePlaylist() {
-    var table = document.getElementById("playlist");
-    var tbody = table.querySelector("tbody");
-    var rows = Array.from(tbody.getElementsByTagName("tr"));
+    var rows = Array.from(playlist.querySelectorAll(".song"));
     shuffleArray(rows);
 
     // Remove all rows from the tbody
     rows.forEach(function (row) {
-      tbody.removeChild(row);
+      playlist.querySelector("tbody").appendChild(row);
     });
 
-    // Append the shuffled rows to the tbody
-    rows.forEach(function (row) {
-      tbody.appendChild(row);
-    });
-
-    // If a song is playing, restart the playlist after shuffling
-    if (!audioPlayer.paused) {
-      playFirstSong();
-    }
+    playFirstSong();
   }
 
   function shuffleArray(array) {
@@ -192,17 +154,42 @@
   }
 
   function addNextButton() {
-    var nextButton = document.createElement("button");
-    nextButton.id = "next-button"; // Added id attribute
-    nextButton.classList.add("btn", "btn-primary", "btn-lg", "ml-2");
-    nextButton.textContent = "Next";
-    nextButton.onclick = playNextSong; // Call playNextSong function when clicked
+    var nextButton = document.getElementById("next-button");
+    if (!nextButton) {
+      nextButton = document.createElement("button");
+      nextButton.id = "next-button";
+      nextButton.classList.add("btn", "btn-primary", "btn-lg", "ml-2");
+      nextButton.textContent = "Next";
+      nextButton.onclick = playNextSong;
 
-    var shuffleButton = document.getElementById("shuffle-button");
-    shuffleButton.parentNode.insertBefore(
-      nextButton,
-      shuffleButton.nextSibling
-    );
+      document.querySelector(".d-flex").appendChild(nextButton);
+    }
   }
+
+  function deletePlaylist(playlistId) {
+    var confirmDelete = confirm(
+      "Are you sure you want to delete this playlist?"
+    );
+    if (confirmDelete) {
+      fetch(`/playlist/${playlistId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            window.location.href = "/home";
+          } else {
+            console.error("Failed to delete playlist");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", playFirstSong);
 </script>
 {% endblock %}

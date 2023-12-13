@@ -7,13 +7,13 @@ endblock %} {% block content %}
     <h1 class="text-center mt-1 mb-4 t4">Admin Login</h1>
     <form action="/admin/login" method="post">
       <div class="form-group mb-3">
-        <h5 for="number" class="form-label text-white t4">Phone Number:</h5>
+        <h5 for="number" class="form-label text-white t4">Username:</h5>
         <input
           type="text"
-          name="number"
+          name="name"
           class="nm form-control rounded w-100"
-          id="number"
-          placeholder="Enter phone number"
+          id="name"
+          placeholder="Enter Username"
           required
         />
       </div>

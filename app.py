@@ -51,10 +51,10 @@ def root():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
-        number, password = request.form.get(
-            'number'), request.form.get('password')
+        name, password = request.form.get(
+            'name'), request.form.get('password')
 
-        user = User.query.filter_by(number=number).first()
+        user = User.query.filter_by(username=name).first()
         if user and password == user.password:
             login_user(user)
             flash('Login successful!', 'success')
@@ -268,14 +268,18 @@ def create_playlist():
         return render_template('create_playlist.html', songs=songs)
 
 
-@app.route('/playlist/<id>')
+@app.route('/playlist/<id>', methods=["GET", "DELETE"])
 @login_required
 def play_playlist(id):
     playlist = Playlist.query.get_or_404(id)
+    if request.method == "DELETE":
+        db.session.delete(playlist)
+        db.session.commit()
+        return '', 204
 
-    songs = playlist.songs
-
-    return render_template("playlist.html", playlist=playlist, songs=songs)
+    else:
+        songs = playlist.songs
+        return render_template("playlist.html", playlist=playlist, songs=songs)
 
 
 @app.route('/playlist/<pid>/<sid>/')
@@ -352,10 +356,10 @@ def record_view(song_id):
 @app.route('/admin/login', methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
-        number, password = request.form.get(
-            'number'), request.form.get('password')
+        name, password = request.form.get(
+            'name'), request.form.get('password')
 
-        admin = User.query.filter_by(number=number).first()
+        admin = User.query.filter_by(username=name).first()
         if admin and password == admin.password:
             if admin.role == 'Admin':
                 login_user(admin)
@@ -372,7 +376,7 @@ def admin_login():
 @app.route('/admin')
 @login_required
 def admin():
-    num_users = User.query.count()
+    num_users = User.query.count() - 1
     num_creators = User.query.filter_by(role='Creator').count()
     num_songs = Songs.query.count()
     num_albums = Album.query.count()

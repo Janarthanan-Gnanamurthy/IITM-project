@@ -1,0 +1,267 @@
+.bgc-1 {
+    background-color: #5b2b78;
+  }
+  .bgc-2 {
+    background-color: #491f62;
+  }
+  .bgc-3 {
+    background-color: #37134c;
+  }
+  .bgc-4 {
+    background-color: #250837;
+  }
+  .t2 {
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    color: #e3e2e5;
+  }
+  .t3 {
+    font-family: Bahnschrift SemiLight;
+  }
+  .t4 {
+    color: #fcfbfe;
+    font-weight: bold;
+  }
+  .t5 {
+    color: #9a999d;
+    font-weight: bold;
+  }
+
+  body {
+    background-color: #250837;
+    color: #e3e2e5;
+  }
+
+  .navbar {
+    background-color: #491f62;
+  }
+
+  .navbar-brand svg {
+    fill: #e3e2e5;
+    height: 50px;
+  }
+
+  .navbar-brand {
+    width: 50px;
+  }
+
+  .navbar .form-control {
+    background-color: #2b2b2b;
+    color: #e3e2e5;
+  }
+
+  .navbar .btn-outline-light {
+    border-color: #e3e2e5;
+    color: #e3e2e5;
+  }
+
+  .navbar .btn-outline-light:hover {
+    background-color: #e3e2e5;
+    color: #491f62;
+  }
+  .container {
+    margin-top: 20px;
+  }
+
+  h1 {
+    color: #e3e2e5;
+  }
+
+  h2 {
+    color: #e3e2e5;
+  }
+
+  .card {
+    background-color: #491f62;
+    color: #e3e2e5;
+  }
+
+  .card-title {
+    color: #e3e2e5;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .table {
+    background-color: #2b2b2b;
+    color: #e3e2e5;
+  }
+
+  .table th,
+  .table td {
+    border-color: #491f62;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: #491f62;
+    color: #fcfbfe;
+    cursor: pointer;
+  }
+
+  .table td,
+  .table th {
+    padding: 0px;
+  }
+
+  .btn-outline-primary {
+    border-color: #bebdc1;
+    color: #bebdc1;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #491f62;
+    color: #fcfbfe;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #491f62;
+  }
+
+  .nav-btn {
+    background-color: #491f62;
+    color: #e3e2e5;
+    padding: 0.5em 1em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .nav-btn:active {
+    background-color: #250837;
+    color: #e3e2e5;
+  }
+
+  .lgn-btn {
+    background-color: #e3e2e5;
+    border: 1px solid #9a999d;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    padding: 0.5em 1em;
+    border-radius: 8px;
+    color: #2b2b2b;
+  }
+
+  .lgn-btn:hover {
+    background-color: #491f62;
+    color: #e3e2e5;
+  }
+
+  .btn-primary {
+    background-color: #491f62;
+    color: #e3e2e5;
+    border: 1px solid #9a999d;
+    border-radius: 8px;
+    padding: 0.5em 1em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background-color: #fcfbfe;
+    border-color: #bebdc1;
+    color: #37134c;
+  }
+
+  .btn-primary:active,
+  .btn-primary:focus {
+    background-color: #37134c;
+    border-color: #fcfbfe;
+    color: #ffffff;
+  }
+
+  button:hover,
+  button:active {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+  }
+
+  .d-flex .card {
+    margin-right: 10px;
+  }
+
+  .table {
+    background-color: #2b2b2b;
+    color: #e3e2e5;
+  }
+
+  .table th {
+    background-color: #491f62;
+    color: #fcfbfe;
+  }
+
+  .table th,
+  .table td {
+    border-color: #491f62;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: #37134c;
+    color: #fcfbfe;
+    cursor: pointer;
+  }
+
+  .table td,
+  .table th {
+    padding: 12px;
+  }
+
+  input.nm {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 14px;
+    font-size: 16px;
+    color: #250837;
+    width: 250px;
+  }
+
+  input.nm::placeholder {
+    color: #250837;
+    font-style: none;
+  }
+
+  input.nm:focus {
+    border-color: #0095ff;
+    box-shadow: 0 0 3px #0095ff;
+  }
+
+  input.nm:hover {
+    background-color: #f5f5f5;
+    color: #250837;
+  }
+  input.nm:hover::placeholder {
+    color: #250837;
+  }
+
+  input.nm:disabled {
+    background-color: #ddd;
+    color: #999;
+  }
+  audio {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    width: 500px;
+  }
+
+  .custom-scrollbar {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #491f62 #e3e2e5;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #491f62;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #e3e2e5;
+  }
